@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div class="row row-cols-3 row-cols-lg-4 g-2 g-lg-3">
+    <div class="col">
+      <div>
+        <select class="form-control form-select form-select-sm mb-3" [(ngModel)]="selectedCustomer"
+          (change)="onCustomerSelectionChange($event)">
+          <option value="" disabled [hidden]="selectedCustomer">By Customer</option>
+          <option *ngFor="let customer of listCustomer" [value]="customer.id">IMG - {{customer.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col">
+      <div class="input-group input-group-sm mr-2">
+        <input type="text" class="form-control form-control-sm" placeholder="masukkan nama" name="name" />
+        <div class="input-group-append">
+          <span class="input-group-text">
+            <em class="fa fa-search"></em>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card card-transparent">
+        <div class="card-body">
+          <div>
+            <div class="row row-cols-3 row-cols-lg-5 row-cols-md-4 g-2 g-lg-3">
+              <div *ngFor="let product of listProduct;">
+                <div class="container-fluid text-center p-2 rounded"
+                  style="overflow: hidden; background-color: #f9f9f9; height: 190px; position: relative; cursor: pointer;">
+                  <div class="position-absolute top-2 end-0 right-5 z-3 ph-2">
+                    <a href="javascript: void(0);" class="align-middle me-2"
+                      (click)="updateProduct(formProduct, product)" placement="left" container="body" ngbTooltip="Ubah">
+                      <em class="fa fa-edit font-size-14"></em>
+                    </a>
+                  </div>
+                  <div class="col" *ngIf="product.selected == false || !product.selected" (click)="selectProduct(product)">
+                      <div style="height:100px ;" class="container position-relative">
+                        <div class="image-picker mb-5">
+                          <!-- <div class="no-image" *ngIf="product.photo == null">
+                            <em class="fa fa-image"></em>
+                          </div> -->
+                          <div class="heigh-100">
+                            <img *ngIf="product.photo_url" src="{{product.photo_url}}" class="rounded"
+                              style="width: 100px; overflow: hidden;" alt="">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-center font-size-sm h-100">
+                        <!-- <div class="h-100 d-flex flex-column justify-content-center"> -->
+                          <p class="mt-2 mb-1 h-100">{{product.name}}</p>
+                        <!-- </div> -->
+                        <p class="fw-bolder text-primary mb-1" style="height:20px">{{product.price | currency:'Rp.'}}</p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <div class="card-body p-0">
+          <app-form-sale [selectedCustomer]="customerdata" [product]="selectedProduct" (afterSave)="resetselectedData()"></app-form-sale>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formProduct let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0">{{ titleModal }}</h5>
+    <button type="button" class="close" (click)="modal.close()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-form-product [productId]="productId" (afterSave)="modal.close(); getProducts()"></app-form-product>
+  </div>
+</ng-template>
